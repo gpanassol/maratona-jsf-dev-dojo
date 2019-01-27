@@ -1,6 +1,6 @@
 # Maratona JSF
 
-##DevDojo
+## DevDojo
 
 Estudando a especificação JSF 2.2 seguindo o curso Maratona JSF da DevDojo
 
