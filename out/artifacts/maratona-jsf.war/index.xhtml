@@ -4,28 +4,122 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+   <h:head>
+
+
+   </h:head>
+
    <h:body>
-      <h:outputLabel value="#{estudanteRegistrarBean.nome}"/><br/>
-      <h:outputLabel value="#{estudanteRegistrarBean['sobrenome']}"/><br/><br/>
+
+
+
+      <p:importEnum type="br.com.devdojo.maratonajsf.bean.estudante.model.enums"
+                    var="Turno" allSuffix="ALL_ENUM_VALUES" />
+
+
+      <h:outputLabel value="#{estudanteRegistrarBean.estudante.nome}"/><br/>
+      <h:outputLabel value="#{estudanteRegistrarBean.estudante['sobrenome']}"/><br/><br/>
 
       <h:outputText value="Comparação Nota"/><br/><br/>
-      <h:outputLabel value="#{estudanteRegistrarBean.nota1 eq estudanteRegistrarBean.nota2}"/><br/>
-      <h:outputLabel value="#{estudanteRegistrarBean.nota1 eq estudanteRegistrarBean.nota3}"/><br/>
-      <h:outputLabel value="#{estudanteRegistrarBean.nota1 le estudanteRegistrarBean.nota3}"/><br/>
-      <h:outputLabel value="#{estudanteRegistrarBean.nota1 lt estudanteRegistrarBean.nota3}"/><br/>
-      <h:outputLabel value="#{estudanteRegistrarBean.nota1 == estudanteRegistrarBean.nota3}"/><br/>
-      <h:outputLabel value="#{estudanteRegistrarBean.nota1 eq estudanteRegistrarBean.nota3 and
-      estudanteRegistrarBean.nome.equals('Jose') }"/><br/>
+      <h:outputLabel value="#{estudanteRegistrarBean.estudante.nota1 eq estudanteRegistrarBean.estudante.nota2}"/><br/>
+      <h:outputLabel value="#{estudanteRegistrarBean.estudante.nota1 eq estudanteRegistrarBean.estudante.nota3}"/><br/>
+      <h:outputLabel value="#{estudanteRegistrarBean.estudante.nota1 le estudanteRegistrarBean.estudante.nota3}"/><br/>
+      <h:outputLabel value="#{estudanteRegistrarBean.estudante.nota1 lt estudanteRegistrarBean.estudante.nota3}"/><br/>
+      <h:outputLabel value="#{estudanteRegistrarBean.estudante.nota1 == estudanteRegistrarBean.estudante.nota3}"/><br/>
+      <h:outputLabel value="#{estudanteRegistrarBean.estudante.nota1 eq estudanteRegistrarBean.estudante.nota3 and
+      estudanteRegistrarBean.estudante.nome.equals('Jose') }"/><br/>
 
-      <h:outputLabel value="#{estudanteRegistrarBean.nota1 eq estudanteRegistrarBean.nota2 ? 'igual' : 'diferente'}"/><br/>
+
+
+      <h:outputLabel value="#{estudanteRegistrarBean.estudante.nota1 eq estudanteRegistrarBean.estudante.nota2 ? 'igual' : 'diferente'}"/><br/>
 
       <br/><h:outputText value="Comparação Nota"/><br/><br/>
 
-      <h:outputLabel value="#{estudanteRegistrarBean.nota1 = 20}"/><br/>
-      <h:outputLabel value="#{estudanteRegistrarBean.nota1}"/><br/>
+      <h:outputLabel value="#{estudanteRegistrarBean.estudante.nota1 = 20}"/><br/>
+      <h:outputLabel value="#{estudanteRegistrarBean.estudante.nota1}"/><br/>
 
       <!-- TESTE DESSA PORRA DE COMENTARIO-->
 
+      <br/><h:outputText value="Enum"/><br/><br/>
+      <h:outputLabel value="#{estudanteRegistrarBean.estudante.turno}"/><br/>
+      <h:outputLabel value="#{Turno.MATUTINO}"/><br/>
+      <h:outputLabel value="#{estudanteRegistrarBean.estudante.turno.equals(Turno.MATUTINO)}"/><br/>
+
+      <!-- Arrays-->
+
+      <h:outputLabel value="
+         #{estudanteRegistrarBean.nomesArray[0]}
+         #{estudanteRegistrarBean.nomesArray[1]}
+         #{estudanteRegistrarBean.nomesArray[2]}
+      "/>
+
+      <br/><br/>
+
+      <ui:repeat value="#{estudanteRegistrarBean.nomesArray}" var="nome">
+         <h:outputLabel value="#{nome}" /><br/>
+      </ui:repeat>
+
+      #{estudanteRegistrarBean.executar()} <br/>
+      #{estudanteRegistrarBean.executar('xuxu beleza')}
+
+      #{estudanteRegistrarBean.executarRetorno(estudanteRegistrarBean.estudante.nome)}<br/>
+
+      <h:form>
+         <h:commandButton value="Ir para próxima Pagina" action="#{estudanteRegistrarBean.irParaIndex2}" /><br/>
+         <h:commandButton value="Ir para próxima Pagina" actionListener="#{estudanteRegistrarBean.irParaIndex2}" /> <br/>
+         <h:commandButton value="Soltar Magia" onclick="fazMagica('#{estudanteRegistrarBean.estudante.nome}')" /> <br/>
+      </h:form>
+
+      <!-- Imprimindo CCS com EL -->
+      <ui:repeat value="#{estudanteRegistrarBean.nomesArray}" var="nome" varStatus="status">
+         <h:outputLabel value="#{nome}" style="color: #{status.index mod 2 == 0 ? 'red' : 'green'}" /><br/>
+      </ui:repeat>
+
+      <br/><br/><br/>
+
+      <h:form id="form">
+
+         <!-- Botoes Nota-->
+         <h:commandButton value="Exibir Nota">
+            <f:ajax render="notasGrid" listener="#{estudanteRegistrarBean.exibirNotas}"/>
+         </h:commandButton>
+         <h:commandButton value="Esconder Nota">
+            <f:ajax render="notasGrid" listener="#{estudanteRegistrarBean.esconderNotas}"/>
+         </h:commandButton><br/>
+
+         <!-- Botoes Link-->
+         <h:commandButton value="Exibir Link">
+            <f:ajax render="pgLink" listener="#{estudanteRegistrarBean.exibirLink}"/>
+         </h:commandButton>
+         <h:commandButton value="Esconder Link">
+            <f:ajax render="pgLink" listener="#{estudanteRegistrarBean.esconderLink}"/>
+         </h:commandButton><br/>
+
+
+         <h:panelGrid id="notasGrid">
+            <h:outputText value="#{estudanteRegistrarBean.estudante.nota1}" rendered="#{estudanteRegistrarBean.renderizar}"/><br/>
+            <h:outputText value="#{estudanteRegistrarBean.estudante.nota2}" rendered="#{estudanteRegistrarBean.renderizar}"/><br/>
+            <h:outputText value="#{estudanteRegistrarBean.estudante.nota3}" rendered="#{estudanteRegistrarBean.renderizar}"/><br/>
+         </h:panelGrid>
+
+         <h:panelGroup id="pgLink">
+            <ui:fragment id="link" rendered="#{estudanteRegistrarBean.link}">
+               <a href="http://www.google.com.br" target="_blank">www.google.com.br</a>
+            </ui:fragment>
+         </h:panelGroup>
+
+      </h:form>
+
+
    </h:body>
+
+   <script type="text/javascript">
+      function fazMagica(magica){
+         alert(magica);
+      }
+   </script>
+
 </html>
